@@ -30,7 +30,7 @@ var topView, settings, decl,
 
 			while ( l-- && !cancel ) {
 				link = links[ l ];
-				if ( !link.from || (link.from && $( source ).is( link.from ))) {
+				if ( !link.from || (link.from && $( source ).is( link.from )) || $( source ).is( "textarea" )) {
 					fromAttr = link.fromAttr;
 					if ( !fromAttr ) {
 						// Merge in the default attribute bindings for this source element
@@ -60,7 +60,7 @@ var topView, settings, decl,
 									}
 									toPath = path;
 									cnvt =  convert || link.convert;
-									cnvtParams = convertParams; 
+									cnvtParams = convertParams;
 								});
 							}
 						}
@@ -551,7 +551,7 @@ function getLeafObject( object, path ) {
 	return object && object[ path ] && [ object, path ];
 }
 
-function inputAttrib( elem ) { 
+function inputAttrib( elem ) {
 	return elem.type === "checkbox" ? elem.checked : $( elem ).val();
 }
 
@@ -642,6 +642,14 @@ $.extend({
 		getFromAttr: "data-getfrom",
 		merge: {
 			input: {
+				from: {
+					fromAttr: inputAttrib
+				},
+				to: {
+					toAttr: "value"
+				}
+			},
+			textarea: {
 				from: {
 					fromAttr: inputAttrib
 				},
@@ -786,7 +794,7 @@ $.fn.extend({
 		// Declarative Linking
 		// Supported signatures:
 		//    link( data );
-		//    link( data, options ); 
+		//    link( data, options );
 		// If options is a function, cb - shorthand for { beforeChange: cb }
 		if ( data ) {
 			link( data, this, undefined, true, options );
